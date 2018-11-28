@@ -8,6 +8,7 @@ import re
 from collections import Counter
 #from colors import *
 
+from math import factorial
 try: import cPickle as pickle #cPickle is faster than pickle
 except: import pickle #if cPickle does not exist, use pickle
 
@@ -126,7 +127,7 @@ functions = set(['_', 'e', 'pi', 'phi', 'round', 'not', 'abs', 'floor', 'ceil', 
                  'degrees', 'deg', 'radians', 'rad', 'sinh', 'cosh', 'tanh', 'asinh',
                  'acosh', 'atanh', 'csc', 'sec', 'del', 'expr'])
 
-ops = tuple('^%/*-+<>=&|@') #operations
+ops = tuple('^%C/*-+<>=&|@') #operations
 letters = set('abcdefghijklmnopqrstuvwxyz_')
 numbers = set('0123456789.')
 steps = echo = False
@@ -149,6 +150,10 @@ def highlight(text):
     if text in ops: return yellow(bold(text))
     if text in functions: return cyan(bold(text))
     return text
+
+
+def choose(n, r):
+    return factorial(n) // factorial(r) // factorial(n-r)
 
 
 #take a string and evaluate it as an expression
@@ -290,6 +295,7 @@ def calculate(expression, variables={}, steps=False, echo=False):
                     if   op == '&': out = int(bool(a and b))
                     elif op == '|': out = int(bool(a or b))
                     elif op == '^': out = a ** b
+                    elif op == 'C': out = choose(a, b)
                     elif op == '%': out = a % b
                     elif op == '/': out = a / b
                     elif op == '*': out = a * b
@@ -481,7 +487,7 @@ def setVars(variables): #write to the file
 
 def command(expression):
     global steps, echo, helpIndex
-    expression = str(expression).lower() #convert the expression to lowercase
+    # expression = str(expression).lower() #convert the expression to lowercase
     expr = expression.strip() #temporarily remove whitespace
     if expr in ('exit', 'quit'): quit()
     if expr == 'echo on' or expr == 'echo':
