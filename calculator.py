@@ -430,6 +430,8 @@ Operators:
 &	and (boolean)
 |	or (boolean)
 !	factorial
+C	choose
+P	permutation
 _	unary minus (times -1)
 ->, @	store (e.g. 10->var)''',
 
