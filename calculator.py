@@ -8,11 +8,10 @@ import re
 from collections import Counter
 #from colors import *
 
-from math import factorial
 try: import cPickle as pickle #cPickle is faster than pickle
 except: import pickle #if cPickle does not exist, use pickle
 
-#TODO implement: nCr, nPr, xor, !=, >=, <=
+#TODO implement: xor, !=, >=, <=
 
 
 #######################    COLORS SETUP    ################################
@@ -127,7 +126,7 @@ functions = set(['_', 'e', 'pi', 'phi', 'round', 'not', 'abs', 'floor', 'ceil', 
                  'degrees', 'deg', 'radians', 'rad', 'sinh', 'cosh', 'tanh', 'asinh',
                  'acosh', 'atanh', 'csc', 'sec', 'del', 'expr'])
 
-ops = tuple('^%C/*-+<>=&|@') #operations
+ops = tuple('^%PC/*-+<>=&|@') #operations
 letters = set('abcdefghijklmnopqrstuvwxyz_')
 numbers = set('0123456789.')
 steps = echo = False
@@ -151,10 +150,11 @@ def highlight(text):
     if text in functions: return cyan(bold(text))
     return text
 
-
 def choose(n, r):
-    return factorial(n) // factorial(r) // factorial(n-r)
+    return math.factorial(n) // math.factorial(r) // math.factorial(n-r)
 
+def permutate(n, r):
+    return math.factorial(n) // math.factorial(n-r)
 
 #take a string and evaluate it as an expression
 #def calculate(expression, echo=False, steps=False):
@@ -296,6 +296,7 @@ def calculate(expression, variables={}, steps=False, echo=False):
                     elif op == '|': out = int(bool(a or b))
                     elif op == '^': out = a ** b
                     elif op == 'C': out = choose(a, b)
+                    elif op == 'P': out = permutate(a, b)
                     elif op == '%': out = a % b
                     elif op == '/': out = a / b
                     elif op == '*': out = a * b
